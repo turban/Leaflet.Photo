@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Instagram Popup</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta property="og:image" content="route.png" />
+	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="lib/cluster/MarkerCluster.css" />	
+	<link rel="stylesheet" href="../Leaflet.Photo.css" />	
+	<link rel="stylesheet" href="css/map.css" />
+</head>
+<body>
+	<div id="map"></div>
+	<script src="lib/reqwest.min.js"></script>
+	<script src="lib/leaflet/leaflet.js"></script>
+	<script src="lib/cluster/leaflet.markercluster.js"></script>	
+	<script src="../Leaflet.Photo.js"></script>	
+	<script>
+
+	var map = L.map('map', {
+		maxZoom: 14
+	});
+
+	L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo2&zoom={z}&x={x}&y={y}', {
+		attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
+	}).addTo(map);
+
+	var photoLayer = L.photo.cluster().on('click', function (evt) {
+		var photo = evt.layer.photo,
+			template = '<img src="{url}"/></a><p>{caption}</p>';
+
+		if (photo.video && (!!document.createElement('video').canPlayType('video/mp4; codecs=avc1.42E01E,mp4a.40.2'))) {
+			template = '<video autoplay controls poster="{url}"><source src="{video}" type="video/mp4"/></video>';
+		}; 
+
+		evt.layer.bindPopup(L.Util.template(template, evt.layer.photo), {
+			className: 'leaflet-popup-photo',
+			minWidth: 400
+		}).openPopup();
+	});
+
+	reqwest({
+		url: 'https://picasaweb.google.com/data/feed/api/user/bjorn.sandvik/albumid/6052628080819524545?alt=json-in-script',
+		type: 'jsonp',
+		success: function (data) {
+			var photos = [];
+			data = data.feed.entry;
+			for (var i = 0; i < data.length; i++) {
+				var photo = data[i];
+				if (photo['georss$where']) {
+					var pos = photo['georss$where']['gml$Point']['gml$pos']['$t'].split(' ');
+					photos.push({
+						id: photo['gphoto$id']['$t'],
+						timestamp: parseInt(photo['gphoto$timestamp']['$t']),
+						lat: parseFloat(pos[0]),
+						lng: parseFloat(pos[1]),
+						url: photo['media$group']['media$content'][0].url,
+						caption: photo['media$group']['media$description']['$t'],
+						iconUrl: photo['media$group']['media$thumbnail'][0].url,
+						video: (photo['media$group']['media$content'][1] ? photo['media$group']['media$content'][1].url : null) 
+					});
+				};
+			}
+			photoLayer.add(photos).addTo(map);
+			map.fitBounds(photoLayer.getBounds());
+		}
+	});
+
+	</script>
+</body>
+</html>
