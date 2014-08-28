@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leaflet Instagram CartoDB</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta property="og:image" content="route.png" />
+	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+	<link rel="stylesheet" href="lib/cluster/MarkerCluster.css" />	
+	<link rel="stylesheet" href="../Leaflet.Photo.css" />	
+	<link rel="stylesheet" href="css/map.css" />
+</head>
+<body>
+	<div id="map"></div>
+	<script src="lib/reqwest.min.js"></script>
+	<script src="lib/leaflet/leaflet.js"></script>
+	<script src="lib/cluster/leaflet.markercluster.js"></script>	
+	<script src="../Leaflet.Photo.js"></script>	
+	<script>
+
+	var map = L.map('map', {
+		maxZoom: 14
+	});
+
+	L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo2&zoom={z}&x={x}&y={y}', {
+		attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
+	}).addTo(map);
+
+	var photoLayer = L.photo.cluster().on('click', function (evt) {
+		var photo = evt.layer.photo,
+			template = '<img src="{url}" width="300" height="300" /></a><p>{caption}</p>';
+
+		if (photo.video && (!!document.createElement('video').canPlayType('video/mp4; codecs=avc1.42E01E,mp4a.40.2'))) {
+			template = '<video autoplay controls poster="{url}" width="300" height="300"><source src="{video}" type="video/mp4"/></video>';
+		}; 
+
+		evt.layer.bindPopup(L.Util.template(template, evt.layer.photo), {
+			className: 'leaflet-popup-photo',
+			minWidth: 300
+		}).openPopup();
+	});
+
+	reqwest({
+		url: 'http://turban.cartodb.com/api/v2/sql?q=SELECT latitude AS lat, longitude AS lng, image_thumb AS thumbnail, image_standard AS url, video_standard AS video, caption FROM instagram WHERE the_geom %26%26 ST_SetSRID(ST_MakeBox2D(ST_Point(5.727, 59.124), ST_Point(5.924, 59.305)), 4326)',
+		success: function (data) {
+			photoLayer.add(data.rows).addTo(map);
+			map.fitBounds(photoLayer.getBounds());
+		}
+	});
+
+	</script>
+</body>
+</html>

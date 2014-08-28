@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Leaflet Instagram Popup</title>
+	<title>Leaflet Picasa Web Albums</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta property="og:image" content="route.png" />
@@ -51,13 +51,11 @@
 				if (photo['georss$where']) {
 					var pos = photo['georss$where']['gml$Point']['gml$pos']['$t'].split(' ');
 					photos.push({
-						id: photo['gphoto$id']['$t'],
-						timestamp: parseInt(photo['gphoto$timestamp']['$t']),
 						lat: parseFloat(pos[0]),
 						lng: parseFloat(pos[1]),
 						url: photo['media$group']['media$content'][0].url,
 						caption: photo['media$group']['media$description']['$t'],
-						iconUrl: photo['media$group']['media$thumbnail'][0].url,
+						thumbnail: photo['media$group']['media$thumbnail'][0].url,
 						video: (photo['media$group']['media$content'][1] ? photo['media$group']['media$content'][1].url : null) 
 					});
 				};
