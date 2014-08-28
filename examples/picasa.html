@@ -34,7 +34,7 @@
 			template = '<video autoplay controls poster="{url}"><source src="{video}" type="video/mp4"/></video>';
 		}; 
 
-		evt.layer.bindPopup(L.Util.template(template, evt.layer.photo), {
+		evt.layer.bindPopup(L.Util.template(template, photo), {
 			className: 'leaflet-popup-photo',
 			minWidth: 400
 		}).openPopup();
@@ -46,13 +46,14 @@
 		success: function (data) {
 			var photos = [];
 			data = data.feed.entry;
+
 			for (var i = 0; i < data.length; i++) {
 				var photo = data[i];
 				if (photo['georss$where']) {
 					var pos = photo['georss$where']['gml$Point']['gml$pos']['$t'].split(' ');
 					photos.push({
-						lat: parseFloat(pos[0]),
-						lng: parseFloat(pos[1]),
+						lat: pos[0],
+						lng: pos[1],
 						url: photo['media$group']['media$content'][0].url,
 						caption: photo['media$group']['media$description']['$t'],
 						thumbnail: photo['media$group']['media$thumbnail'][0].url,
@@ -60,6 +61,7 @@
 					});
 				};
 			}
+			
 			photoLayer.add(photos).addTo(map);
 			map.fitBounds(photoLayer.getBounds());
 		}

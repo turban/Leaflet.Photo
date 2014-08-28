@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Leaflet Instagram CartoDB</title>
+	<title>Leaflet Norvegiana</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta property="og:image" content="route.png" />
@@ -27,23 +27,34 @@
 	}).addTo(map);
 
 	var photoLayer = L.photo.cluster().on('click', function (evt) {
-		var photo = evt.layer.photo,
-			template = '<img src="{url}" width="300" height="300" /></a><p>{caption}</p>';
-
-		if (photo.video && (!!document.createElement('video').canPlayType('video/mp4; codecs=avc1.42E01E,mp4a.40.2'))) {
-			template = '<video autoplay controls poster="{url}" width="300" height="300"><source src="{video}" type="video/mp4"/></video>';
-		}; 
-
-		evt.layer.bindPopup(L.Util.template(template, photo), {
+		evt.layer.bindPopup(L.Util.template('<img src="{url}"/></a><p>{caption}</p>', evt.layer.photo), {
 			className: 'leaflet-popup-photo',
-			minWidth: 300
+			minWidth: 400
 		}).openPopup();
 	});
 
 	reqwest({
-		url: 'http://turban.cartodb.com/api/v2/sql?q=SELECT latitude AS lat, longitude AS lng, image_thumb AS thumbnail, image_standard AS url, video_standard AS video, caption FROM instagram WHERE the_geom %26%26 ST_SetSRID(ST_MakeBox2D(ST_Point(5.727, 59.124), ST_Point(5.924, 59.305)), 4326)',
+		url: 'http://kulturnett2.delving.org/api/search?query=*%3A*&format=jsonp&rows=100&pt=59.936%2C10.76&d=1&qf=abm_contentProvider_text%3ADigitaltMuseum',
+		type: 'jsonp',
 		success: function (data) {
-			photoLayer.add(data.rows).addTo(map);
+			var photos = [];
+			data = data.result.items;
+
+			for (var i = 0; i < data.length; i++) {
+				var photo = data[i].item.fields;
+				if (photo.abm_latLong) {
+					var pos = photo.abm_latLong[0].split(',');
+					photos.push({
+						lat: pos[0],
+						lng: pos[1],
+						url: photo.delving_thumbnail[0],
+						caption: (photo.delving_description ? photo.delving_description[0] : '') + ' - Kilde: <a href="' + photo.delving_landingPage + '">' + photo.delving_collection + '</a>',
+						thumbnail: photo.delving_thumbnail[0]
+					});
+				}	
+			}
+
+			photoLayer.add(photos).addTo(map);
 			map.fitBounds(photoLayer.getBounds());
 		}
 	});
