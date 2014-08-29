@@ -19,14 +19,14 @@
 	<script>
 
 	var map = L.map('map', {
-		maxZoom: 14
+		maxZoom: 17
 	});
 
 	L.tileLayer('http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart&zoom={z}&x={x}&y={y}', {
 		attribution: '&copy; <a href="http://kartverket.no/">Kartverket</a>'
 	}).addTo(map);
 
-	var photoLayer = L.photo.cluster().on('click', function (evt) {
+	var photoLayer = L.photo.cluster({ spiderfyDistanceMultiplier: 1.2 }).on('click', function (evt) {
 		evt.layer.bindPopup(L.Util.template('<img src="{url}"/></a><p>{caption}</p>', evt.layer.photo), {
 			className: 'leaflet-popup-photo',
 			minWidth: 400
