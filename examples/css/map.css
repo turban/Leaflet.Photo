@@ -12,7 +12,8 @@ html, body, #map {
 	width: 15px;
 	height: 15px;
 	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
-	color: #555;	
+	color: #555;
+    box-sizing: content-box; /* This should be specified to prevent the confliction with bootstrap's scaffolding.less which makes border-box as the default for box-sizing. */
 }
 .leaflet-popup-photo a.leaflet-popup-close-button:hover {
 	color: #333;
