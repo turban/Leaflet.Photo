@@ -1,6 +1,6 @@
 .leaflet-marker-photo { 
 	border: 2px solid #fff; 
-	box-shadow: 3px 3px 10px #888; 
+	box-shadow: 3px 3px 10px #888;
 }	
 
 .leaflet-marker-photo div { 
@@ -24,4 +24,5 @@
 	text-align: center;
 	padding: 3px;
 	box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+    box-sizing: content-box; /* This should be specified to prevent the confliction with bootstrap's scaffolding.less which makes border-box as the default for box-sizing. */
 }
