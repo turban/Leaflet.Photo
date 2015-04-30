@@ -26,7 +26,7 @@ L.Photo = L.FeatureGroup.extend({
 	createMarker: function (photo) {
 		var marker = L.marker(photo, {
 			icon: L.divIcon(L.extend({
-				html: '<div style="background-image: url(' + photo.thumbnail + ');"></div>​',
+				html: '<div class="single" style="background-image: url(' + photo.thumbnail + ');"></div>​',
 				className: 'leaflet-marker-photo'
 			}, photo, this.options.icon)),
 			title: photo.caption || ''
@@ -48,9 +48,28 @@ if (L.MarkerClusterGroup) {
 			maxClusterRadius: 100,		
 			showCoverageOnHover: false,
 			iconCreateFunction: function(cluster) {
+
+				var rotations = ['rotation1', 'rotation2', 'rotation3'],
+					i,
+					rotation,
+					thumbnail,
+					imageClass,
+					markers = cluster.getAllChildMarkers(),
+					html = [];
+
+				for (i = 0; i < markers.length; i++) {
+					rotation = rotations[i % rotations.length];
+					imageClass = 'inner ' + rotation;
+					if (i === 0) { //apply shadow to bottom-most image
+						imageClass += ' first';
+					}
+					thumbnail = markers[i].photo.thumbnail;
+					html.push('<div class="' + imageClass + '" style="background-image: url(' + thumbnail + ');"></div>');
+				}
+
 				return new L.DivIcon(L.extend({
 					className: 'leaflet-marker-photo', 
-					html: '<div style="background-image: url(' + cluster.getAllChildMarkers()[0].photo.thumbnail + ');"></div>​<b>' + cluster.getChildCount() + '</b>'
+					html: '<div class="outer">​' + html + '</div><b>' + cluster.getChildCount() + '</b>'
 				}, this.icon));
 		   	},	
 			icon: {						
