@@ -3,7 +3,6 @@
 	"version": "0.1.0",
 	"description": "package.json is added to Bjorn Sandvik's Leaflet.Photo for the use with Bower"
 	"dependencies": {
-		"leaflet": "~0.7.3"
 	},
 	"devDependencies": {
 	},
