@@ -1,12 +1,27 @@
 {
-	"name": "leaflet-photo",
-	"version": "0.1.0",
-	"description": "package.json is added to Bjorn Sandvik's Leaflet.Photo for the use with Bower",
-	"dependencies": {
-	  "leaflet": "~0.7.3"
-	},
-	"devDependencies": {
-	},
-	"main": "Leaflet.Photo.js",
-	"keywords": ["leaflet", "map", "photo"]
+  "name": "leaflet-photo",
+  "version": "0.1.0",
+  "description": "package.json is added to https://github.com/turban/Leaflet.Photo",
+  "main": "Leaflet.Photo.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pilhokim/Leaflet.Photo.git"
+  },
+  "keywords": [
+    "leaflet",
+    "photo",
+    "map"
+  ],
+  "author": "turban",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pilhokim/Leaflet.Photo/issues"
+  },
+  "homepage": "https://github.com/pilhokim/Leaflet.Photo"
 }
