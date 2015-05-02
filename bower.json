@@ -1,0 +1,28 @@
+{
+  "name": "Leaflet.Photo",
+  "main": "Leaflet.Photo.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/pilhokim/Leaflet.Photo",
+  "authors": [
+    "Bjorn Sandvik"
+  ],
+  "description": "package.json is added to Bjorn Sandvik's Leaflet.Photo for the use with Bower",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "Leaflet.Photo",
+    "leaflet",
+    "map",
+    "photo"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/lib",
+    "test",
+    "tests"
+  ]
+}
