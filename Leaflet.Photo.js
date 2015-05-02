@@ -26,7 +26,7 @@ L.Photo = L.FeatureGroup.extend({
 	createMarker: function (photo) {
 		var marker = L.marker(photo, {
 			icon: L.divIcon(L.extend({
-				html: '<div style="background-image: url(\'' + photo.thumbnail + '\');"></div>​',
+				html: '<div class="leaflet-popup-photo-background-image" style="background-image: url(\'' + photo.thumbnail + '\');"></div>​',
 				className: 'leaflet-marker-photo'
 			}, photo, this.options.icon)),
 			title: photo.caption || ''
@@ -50,7 +50,7 @@ if (L.MarkerClusterGroup) {
 			iconCreateFunction: function(cluster) {
 				return new L.DivIcon(L.extend({
 					className: 'leaflet-marker-photo', 
-					html: '<div style="background-image: url(\'' + cluster.getAllChildMarkers()[0].photo.thumbnail + '\');"></div>​<b>' + cluster.getChildCount() + '</b>'
+					html: '<div class="leaflet-popup-photo-background-image" style="background-image: url(\'' + cluster.getAllChildMarkers()[0].photo.thumbnail + '\');"></div>​<b>' + cluster.getChildCount() + '</b>'
 				}, this.icon));
 		   	},	
 			icon: {						

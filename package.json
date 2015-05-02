@@ -1,0 +1,12 @@
+{
+	"name": "leaflet.photo",
+	"version": "0.1.0",
+	"description": "Bower package version of Bjorn Sandvik's Leaflet.Photo"
+	"dependencies": {
+		"leaflet": "~0.7.3"
+	},
+	"devDependencies": {
+	},
+	"main": "Leaflet.Photo.js",
+	"keywords": ["leaflet", "map", "photo"]
+}
