@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div id="map"></div>
-	<script src="lib/reqwest.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="lib/leaflet/leaflet.js"></script>
 	<script src="lib/cluster/leaflet.markercluster.js"></script>	
 	<script src="../Leaflet.Photo.js"></script>	
@@ -40,32 +40,31 @@
 		}).openPopup();
 	});
 
-	reqwest({
-		url: 'https://picasaweb.google.com/data/feed/api/user/118196887774002693676/albumid/6052628080819524545?alt=json-in-script',
-		type: 'jsonp',
-		success: function (data) {
-			var photos = [];
-			data = data.feed.entry;
+	var url = "http://picasaweb.google.com/data/feed/base/user/118196887774002693676/albumid/6052628080819524545?alt=json&kind=photo";
 
-			for (var i = 0; i < data.length; i++) {
-				var photo = data[i];
-				if (photo['georss$where']) {
-					var pos = photo['georss$where']['gml$Point']['gml$pos']['$t'].split(' ');
-					photos.push({
-						lat: pos[0],
-						lng: pos[1],
-						url: photo['media$group']['media$content'][0].url,
-						caption: photo['media$group']['media$description']['$t'],
-						thumbnail: photo['media$group']['media$thumbnail'][0].url,
-						video: (photo['media$group']['media$content'][1] ? photo['media$group']['media$content'][1].url : null) 
-					});
-				};
-			}
-			
-			photoLayer.add(photos).addTo(map);
-			map.fitBounds(photoLayer.getBounds());
-		}
-	});
+    $.getJSON(url, function (data) {
+
+        var photos = [];
+        data = data.feed.entry;
+
+        for (var i = 0; i < data.length; i++) {
+            var photo = data[i];
+            if (photo['georss$where']) {
+                var pos = photo['georss$where']['gml$Point']['gml$pos']['$t'].split(' ');
+                photos.push({
+                    lat: pos[0],
+                    lng: pos[1],
+                    url: photo['media$group']['media$content'][0].url,
+                    caption: photo['media$group']['media$description']['$t'],
+                    thumbnail: photo['media$group']['media$thumbnail'][0].url,
+                    video: (photo['media$group']['media$content'][1] ? photo['media$group']['media$content'][1].url : null) 
+                });
+            };
+        }
+
+        photoLayer.add(photos).addTo(map);
+        map.fitBounds(photoLayer.getBounds());
+    })
 
 	</script>
 </body>
